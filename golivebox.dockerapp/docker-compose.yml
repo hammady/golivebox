@@ -1,0 +1,8 @@
+version: "3.6"
+services:
+  hello:
+    image: httpd:2.4
+    ports:
+      - "${hello.port}:5678"
+      - "${hello.port2}:5678"
+
