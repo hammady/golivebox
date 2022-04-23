@@ -1,8 +1,53 @@
-version: "3.6"
+version: "3.8"
 services:
-  hello:
-    image: httpd:2.4
+  prayer-scheduler:
+    image: ghcr.io/hammady/prayer-scheduler:0.1.0
+    environment:
+      FULL_CSV_URL: ${prayer-scheduler.full_csv_url}
+      HEADER_CSV_URL: ${prayer-scheduler.header_csv_url}
+      THRESHOLDS_CSV_URL: ${prayer-scheduler.thresholds_csv_url}
+      DATE_FORMAT: ${prayer-scheduler.date_format}
+      TIME_FORMAT: ${prayer-scheduler.time_format}
+      CSV_REQUESTER_USER_AGENT: ${prayer-scheduler.csv_requester_user_agent}
+      BUTT_SERVER_IP: ${prayer-scheduler.butt_server_ip}
+      BUTT_SERVER_PORT: ${prayer-scheduler.butt_server_port}
+    deploy:
+      replicas: ${prayer-scheduler.replicas}
+  stream-watcher:
+    image: ghcr.io/hammady/stream-watcher:0.1.0
+    environment:
+      STREAM_METADATA_URL: ${stream-watcher.stream_metadata_url}
+      WATCH_SLEEP_TIME_SECONDS: ${stream-watcher.watch_sleep_time_seconds}
+      EXIT_AFTER_SLEEP_COUNT: ${stream-watcher.exit_after_sleep_count}
+      TRACK_JSON_PATH: ${stream-watcher.track_json_path}
+      TRACK_MATCH_STRING: ${stream-watcher.track_match_string}
+      SMTP_HOST: ${stream-watcher.smtp_host}
+      SMTP_PORT: ${stream-watcher.smtp_port}
+      SMTP_TLS: ${stream-watcher.smtp_tls}
+      SMTP_USERNAME: ${stream-watcher.smtp_username}
+      SMTP_PASSWORD: ${stream-watcher.smtp_password}
+      SMTP_FROM_ADDR: ${stream-watcher.smtp_from_addr}
+      SMTP_TO_ADDR: ${stream-watcher.smtp_to_addr}
+    deploy:
+      replicas: ${stream-watcher.replicas}
+  companion:
+    image: ghcr.io/hammady/companion:beta-butt-0.1.34
+    volumes:
+      - companion-config:/companion
     ports:
-      - "${hello.port}:5678"
-      - "${hello.port2}:5678"
-
+      - "8000:8000"
+    deploy:
+      replicas: ${companion.replicas}
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    volumes:
+      - /${filebrowser.server_path}:/srv
+      - /${filebrowser.database_path}:/database.db
+    ports:
+      - "${filebrowser.port}:80"
+    user: ${filebrowser.user}
+    deploy:
+      replicas: ${filebrowser.replicas}
+volumes:
+  companion-config:
+    driver: local

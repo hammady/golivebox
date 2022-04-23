@@ -1,4 +1,33 @@
 # default parameters
-hello:
-  port: 8081
-  port2: 8082
+prayer-scheduler:
+  replicas: 1
+  full_csv_url: file:///home/prayertimes/prayers-timetable.csv
+  header_csv_url: file:///home/prayertimes/prayers-header.csv
+  thresholds_csv_url: file:///home/prayertimes/thresholds.csv
+  date_format: "%m/%d/%Y"
+  time_format: "%I:%M %p"
+  csv_requester_user_agent: 
+  butt_server_ip:
+  butt_server_port: 1256
+stream-watcher:
+  replicas: 1
+  stream_metadata_url: "https://control.internet-radio.com:2199/external/rpc.php?m=streaminfo.get&username=mnnexus"
+  watch_sleep_time_seconds: 60
+  exit_after_sleep_count: 100
+  track_json_path: .data[0].song
+  track_match_string: live
+  smtp_host: smtp.gmail.com
+  smtp_port: 587
+  smtp_tls: 1
+  smtp_username: USERNAME_HERE
+  smtp_password: "PASSWORD_HERE"
+  smtp_from_addr: "Sender Name <sender@example.com>"
+  smtp_to_addr: email1@example.com,email2@example.com
+companion:
+  replicas: 1
+filebrowser:
+  user: 1000
+  port: 5000
+  server_path: /home/pi
+  database_path: /home/pi/database.db
+  replicas: 1
