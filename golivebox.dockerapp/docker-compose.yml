@@ -1,5 +1,29 @@
 version: "3.8"
 services:
+  butt:
+    image: ghcr.io/hammady/butt:${BUTT_VERSION}
+    environment:
+      BUTT_SERVER_NAME: MyServer
+      BUTT_SERVER_TYPE: 0
+      BUTT_SERVER_ADDRESS: us2.internet-radio.com
+      BUTT_SERVER_PORT: 8164
+      BUTT_SERVER_PASSWORD: REDACTED
+      BUTT_DEVICE_ID: 1
+      BUTT_SAMPLE_RATE: 44100
+      BUTT_BITRATE: 64
+      BUTT_CHANNELS: 1
+      BUTT_CODEC: mp3
+      BUTT_SILENCE_LEVEL: 54.000000
+      BUTT_SIGNAL_LEVEL: 52.000000
+    volumes:
+      - $HOME/butt:/data
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    devices:
+      - /dev/snd
+    ports:
+      - 1256:1256
+    deploy:
+      replicas: 1
   prayer-scheduler:
     image: ghcr.io/hammady/prayer-scheduler:0.1.0
     environment:
