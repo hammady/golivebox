@@ -1,0 +1,73 @@
+version: "3"
+services:
+  butt:
+    image: ghcr.io/hammady/butt:${BUTT_VERSION}
+    environment:
+      BUTT_SERVER_NAME: ${BUTT_SERVER_NAME:?Missing BUTT_SERVER_NAME}
+      BUTT_SERVER_TYPE: ${BUTT_SERVER_TYPE}
+      BUTT_SERVER_ADDRESS: ${BUTT_SERVER_ADDRESS:?Missing BUTT_SERVER_ADDRESS}
+      BUTT_SERVER_PORT: ${BUTT_SERVER_PORT:?Missing BUTT_SERVER_PORT}
+      BUTT_SERVER_PASSWORD: ${BUTT_SERVER_PASSWORD:?Missing BUTT_SERVER_PASSWORD}
+      BUTT_DEVICE_ID: ${BUTT_DEVICE_ID:?Missing BUTT_DEVICE_ID}
+      BUTT_SAMPLE_RATE: ${BUTT_SAMPLE_RATE}
+      BUTT_BITRATE: ${BUTT_BITRATE}
+      BUTT_CHANNELS: ${BUTT_CHANNELS}
+      BUTT_CODEC: ${BUTT_CODEC}
+      BUTT_SILENCE_LEVEL: ${BUTT_SILENCE_LEVEL}
+      BUTT_SIGNAL_LEVEL: ${BUTT_SIGNAL_LEVEL}
+    volumes:
+      - $PWD:/data
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    devices:
+      - /dev/snd
+    ports:
+      - "${BUTT_PORT}:1256"
+    restart: always
+  prayer-scheduler:
+    image: ghcr.io/hammady/prayer-scheduler:${PRAYER_SCHEDULER_VERSION}
+    environment:
+      FULL_CSV_URL: ${PRAYER_SCHEDULER_FULL_CSV_URL}
+      HEADER_CSV_URL: ${PRAYER_SCHEDULER_HEADER_CSV_URL}
+      THRESHOLDS_CSV_URL: ${PRAYER_SCHEDULER_THRESHOLDS_CSV_URL}
+      DATE_FORMAT: ${PRAYER_SCHEDULER_DATE_FORMAT}
+      TIME_FORMAT: ${PRAYER_SCHEDULER_TIME_FORMAT}
+      CSV_REQUESTER_USER_AGENT: ${PRAYER_SCHEDULER_CSV_REQUESTER_USER_AGENT}
+      BUTT_SERVER_IP: ${PRAYER_SCHEDULER_BUTT_SERVER_IP:?Missing PRAYER_SCHEDULER_BUTT_SERVER_IP}
+      BUTT_SERVER_PORT: ${PRAYER_SCHEDULER_BUTT_SERVER_PORT}
+    restart: always
+  stream-watcher:
+    image: ghcr.io/hammady/stream-watcher:${STREAM_WATCHER_VERSION}
+    environment:
+      STREAM_METADATA_URL: ${STREAM_WATCHER_STREAM_METADATA_URL?Missing STREAM_WATCHER_STREAM_METADATA_URL}
+      WATCH_SLEEP_TIME_SECONDS: ${STREAM_WATCHER_WATCH_SLEEP_TIME_SECONDS}
+      EXIT_AFTER_SLEEP_COUNT: ${STREAM_WATCHER_EXIT_AFTER_SLEEP_COUNT}
+      TRACK_JSON_PATH: ${STREAM_WATCHER_TRACK_JSON_PATH}
+      TRACK_MATCH_STRING: ${STREAM_WATCHER_TRACK_MATCH_STRING}
+      SMTP_HOST: ${STREAM_WATCHER_SMTP_HOST?Missing STREAM_WATCHER_SMTP_HOST}
+      SMTP_PORT: ${STREAM_WATCHER_SMTP_PORT?Missing STREAM_WATCHER_SMTP_PORT}
+      SMTP_TLS: ${STREAM_WATCHER_SMTP_TLS}
+      SMTP_USERNAME: ${STREAM_WATCHER_SMTP_USERNAME?Missing STREAM_WATCHER_SMTP_USERNAME}
+      SMTP_PASSWORD: ${STREAM_WATCHER_SMTP_PASSWORD?Missing STREAM_WATCHER_SMTP_PASSWORD}
+      SMTP_FROM_ADDR: ${STREAM_WATCHER_SMTP_FROM_ADDR?Missing STREAM_WATCHER_SMTP_FROM_ADDR}
+      SMTP_TO_ADDR: ${STREAM_WATCHER_SMTP_TO_ADDR?Missing STREAM_WATCHER_SMTP_TO_ADDR}
+    restart: always
+  companion:
+    image: ghcr.io/hammady/companion:${COMPANION_VERSION}
+    volumes:
+      - companion-config:/companion
+    ports:
+      - "${COMPANION_PORT}:8000"
+    restart: always
+  filebrowser:
+    image: filebrowser/filebrowser:${FILEBROWSER_VERSION}
+    volumes:
+      - $PWD:/srv
+      - $PWD/filebrowser.db:/database.db
+    ports:
+      - "${FILEBROWSER_PORT}:80"
+    user: ${FILEBROWSER_USER:?Missing FILEBROWSER_USER}
+    restart: always
+
+volumes:
+  companion-config:
+    driver: local
