@@ -59,6 +59,7 @@ services:
       - companion-config:/companion
     ports:
       - "${COMPANION_PORT}:8000"
+      - "16622:16622"
     restart: always
   filebrowser:
     image: filebrowser/filebrowser:${FILEBROWSER_VERSION}
