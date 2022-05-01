@@ -3,6 +3,7 @@ services:
   butt:
     image: ghcr.io/hammady/butt:${BUTT_VERSION}
     environment:
+      BUTT_TIMEZONE: ${BUTT_TIMEZONE}
       BUTT_SERVER_NAME: ${BUTT_SERVER_NAME:?Missing BUTT_SERVER_NAME}
       BUTT_SERVER_TYPE: ${BUTT_SERVER_TYPE}
       BUTT_SERVER_ADDRESS: ${BUTT_SERVER_ADDRESS:?Missing BUTT_SERVER_ADDRESS}
