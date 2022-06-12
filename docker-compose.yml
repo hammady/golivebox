@@ -1,7 +1,7 @@
 version: "3"
 services:
   butt:
-    image: ghcr.io/hammady/butt:${BUTT_VERSION}
+    image: ghcr.io/hammady/butt:0.1.34-1
     environment:
       BUTT_TIMEZONE: ${BUTT_TIMEZONE}
       BUTT_SERVER_NAME: ${BUTT_SERVER_NAME:?Missing BUTT_SERVER_NAME}
@@ -25,7 +25,7 @@ services:
       - "${BUTT_PORT}:1256"
     restart: always
   prayer-scheduler:
-    image: ghcr.io/hammady/prayer-scheduler:${PRAYER_SCHEDULER_VERSION}
+    image: ghcr.io/hammady/prayer-scheduler:0.1.1
     environment:
       FULL_CSV_URL: ${PRAYER_SCHEDULER_FULL_CSV_URL}
       HEADER_CSV_URL: ${PRAYER_SCHEDULER_HEADER_CSV_URL}
@@ -38,7 +38,7 @@ services:
       CRON_TIMEZONE: ${PRAYER_SCHEDULER_CRON_TIMEZONE}
     restart: always
   stream-watcher:
-    image: ghcr.io/hammady/stream-watcher:${STREAM_WATCHER_VERSION}
+    image: ghcr.io/hammady/stream-watcher:0.1.0
     environment:
       STREAM_METADATA_URL: ${STREAM_WATCHER_STREAM_METADATA_URL?Missing STREAM_WATCHER_STREAM_METADATA_URL}
       WATCH_SLEEP_TIME_SECONDS: ${STREAM_WATCHER_WATCH_SLEEP_TIME_SECONDS}
@@ -54,7 +54,7 @@ services:
       SMTP_TO_ADDR: ${STREAM_WATCHER_SMTP_TO_ADDR?Missing STREAM_WATCHER_SMTP_TO_ADDR}
     restart: always
   companion:
-    image: ghcr.io/hammady/companion:${COMPANION_VERSION}
+    image: ghcr.io/bitfocus/companion/companion:2.2.1
     volumes:
       - companion-config:/companion
     ports:
@@ -62,7 +62,7 @@ services:
       - "16622:16622"
     restart: always
   filebrowser:
-    image: filebrowser/filebrowser:${FILEBROWSER_VERSION}
+    image: filebrowser/filebrowser:latest
     volumes:
       - $PWD:/srv
       - $PWD/filebrowser.db:/database.db
